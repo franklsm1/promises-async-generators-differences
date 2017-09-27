@@ -31,6 +31,23 @@ export function getThreePostsPromise(idOne, idTwo, idThree) {
   ]);
 }
 
+export function fourNestedGetsExamplePromise(postId) {
+  //get post given post id
+  return get(`${rootURL}/posts/${postId}`)
+    .then(post => {
+      //get all posts by user who authored original post
+       return get(`${rootURL}/posts?userId=${post.userId}`)
+       .then(postArray => {
+         //get all comments on that users first post
+         return get(`${rootURL}/posts/${postArray[0].id}/comments`)
+         .then(commentArray => {
+           //get first comment
+           return get(`${rootURL}/comments/${commentArray[0].id}`)
+         })
+       })
+    });
+}
+
 
 /****************Generators******************/
 export function* getLastPostGenerator() {
@@ -46,14 +63,23 @@ export function* getThreePostsGenerator(idOne, idTwo, idThree) {
     get(`${rootURL}/posts/${idThree}`)
   ];
 }
+export function* fourNestedGetsExampleGenerator(postId) {
+  //get post given post id
+  let post = yield get(`${rootURL}/posts/${postId}`);
+  //get all posts by user who authored original post
+  let postArray = yield get(`${rootURL}/posts?userId=${post.userId}`);
+  //get all comments on that users first post
+  let commentArray = yield get(`${rootURL}/posts/${postArray[0].id}/comments`);
+  //get first comment
+  return yield get(`${rootURL}/comments/${commentArray[0].id}`)
+}
 
 
 /*******************Async********************/
 export async function getLastPostAsync() {
   let response = await get(rootURL + '/posts');
   let lastPostId = response.slice(-1)[0].id;
-  response = await get(`${rootURL}/posts/${lastPostId}`);
-  return response;
+  return await get(`${rootURL}/posts/${lastPostId}`);
 }
 
 export async function getThreePostsAsync(idOne, idTwo, idThree) {
@@ -62,4 +88,15 @@ export async function getThreePostsAsync(idOne, idTwo, idThree) {
     get(`${rootURL}/posts/${idTwo}`),
     get(`${rootURL}/posts/${idThree}`)
   ]);
+}
+
+export async function fourNestedGetsExampleAsync(postId) {
+  //get post given post id
+  let post = await get(`${rootURL}/posts/${postId}`);
+  //get all posts by user who authored original post
+  let postArray = await get(`${rootURL}/posts?userId=${post.userId}`);
+  //get all comments on that users first post
+  let commentArray = await get(`${rootURL}/posts/${postArray[0].id}/comments`);
+  //get first comment
+  return await get(`${rootURL}/comments/${commentArray[0].id}`)
 }

@@ -5,7 +5,10 @@ import {
   getLastPostGenerator,
   getThreePostsGenerator,
   getLastPostAsync,
-  getThreePostsAsync
+  getThreePostsAsync,
+  fourNestedGetsExamplePromise,
+  fourNestedGetsExampleGenerator,
+  fourNestedGetsExampleAsync
 } from '.';
 import co from 'co';
 const rootURL = 'https://jsonplaceholder.typicode.com';
@@ -42,8 +45,15 @@ function validateGetThreePostsFunction(response) {
         expect(postsArray[2].title).toBe('ad iusto omnis odit dolor voluptatibus');
       });
 }
+function validateFourNestedGetsFunction(response) {
+  return response
+    .then(comment => {
+      expect(comment.postId).toEqual(21);
+      expect(comment.email).toEqual('Lura@rod.tv');
+    });
+}
 
-describe('Tests for get last post functions', () => {
+describe('GET last post functions', () => {
   it('GET last post available using promises', () => {
     return validateLastPostFunction(getLastPostPromise());
   });
@@ -56,7 +66,7 @@ describe('Tests for get last post functions', () => {
   });
 });
 
-describe('Tests for get three posts functions', () => {
+describe('GET three posts functions', () => {
   it('GET the 7th, 21st, and 90th post using promises', () => {
     return validateGetThreePostsFunction(getThreePostsPromise(7, 21, 90));
   });
@@ -65,5 +75,18 @@ describe('Tests for get three posts functions', () => {
   });
   it('GET the 7th, 21st, and 90th post using async/await', () => {
     return validateGetThreePostsFunction(getThreePostsAsync(7, 21, 90));
+  });
+})
+
+describe('Four Nested GET Example functions', () => {
+  it('Using Promises', () => {
+    return validateFourNestedGetsFunction(fourNestedGetsExamplePromise(21));
+
+  });
+  it('Using generators', () => {
+    return validateFourNestedGetsFunction(co(fourNestedGetsExampleGenerator(21)));
+  });
+  it('Using async/await', () => {
+    return validateFourNestedGetsFunction(fourNestedGetsExampleAsync(21));
   });
 })
