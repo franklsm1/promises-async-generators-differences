@@ -2,17 +2,44 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 const rootURL = 'https://jsonplaceholder.typicode.com';
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function sleepCallback(ms, cb) {
+  setTimeout(function () {
+     cb()
+  }, ms);
+}
+
+// Please do not use callbacks, this is an example of what NOT to do!
+export function callbackHellExample(cb) {
+  sleepCallback(500, () => {
+    console.log("Executing 1st calback sleep");
+    sleepCallback(500, () => {
+      console.log("Executing 2nd calback sleep");
+      sleepCallback(500, () => {
+        console.log("Executing 3rd calback sleep");
+        sleepCallback(500, () => {
+          console.log("Executing 4th calback sleep");
+          sleepCallback(500, () => {
+            console.log("Executing 5th calback sleep");
+            cb();
+          });
+        });
+      });
+    });
+  });
+}
+
 export function get(url) {
-  let responsePromise = fetch(url)
+    return sleep(500)
+    .then(() => fetch(url))
     .then(response => response.json())
     .catch(error => {
       console.log("I failed getting: ",url);
     });
-
-    return responsePromise
-      .then(json => json);
 }
-
 
 /*****************Promises*******************/
 export function getLastPostPromise() {

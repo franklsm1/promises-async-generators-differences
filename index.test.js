@@ -1,5 +1,6 @@
 import {
   get,
+  callbackHellExample,
   getLastPostPromise,
   getThreePostsPromise,
   getLastPostGenerator,
@@ -12,6 +13,12 @@ import {
 } from '.';
 import co from 'co';
 const rootURL = 'https://jsonplaceholder.typicode.com';
+
+it('Run Callback Hell example', (done) => {
+      callbackHellExample(() => {
+        done();
+      });
+});
 
 describe('Tests for GET functionality', () => {
   it('GET first post', () => {
