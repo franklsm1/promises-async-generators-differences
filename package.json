@@ -9,9 +9,12 @@
   "author": "Sean Franklin",
   "license": "ISC",
   "devDependencies": {
+    "babel-jest": "^21.2.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "co": "^4.6.0",
-    "jest": "^21.2.0"
+    "jest": "^21.2.0",
+    "regenerator-runtime": "^0.11.0"
   },
   "dependencies": {
     "es6-promise": "^4.1.1",
