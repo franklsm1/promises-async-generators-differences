@@ -9,5 +9,6 @@ Please use this as an example of what NOT to do and try to not use callbacks at 
 
 #### Things to know:
 - There is no native way to run asynchronous tasks in parallel using async/await
-- Async functions swallow rejected promises, need try/catch to handle errors
+- Async AND generator functions swallow errors, need try/catch to handle errors
 - First rejected promise in `Promise.all(ArrayOfPromises)` immediately rejects all promises in the array without allowing them all to run to completion
+- Always need to return a promise in a function otherwise it will not wait for completion
